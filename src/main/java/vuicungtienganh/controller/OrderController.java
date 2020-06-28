@@ -4,13 +4,13 @@ import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
-import javax.validation.constraints.Min;
+import javax.persistence.EntityNotFoundException;
 import javax.validation.constraints.NotNull;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.validation.BindingResult;
+import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -44,11 +44,16 @@ public class OrderController {
 		model.addAttribute("orders", salesOrders);
 		return "order/orders";
 	}
-	
+
 	@GetMapping("{id}")
 	public String showOrderDetail(@PathVariable("id") int orderId,
 			Model model) {
 		SalesOrder salesOrder = salesOrderService.findById(orderId);
+		
+		if(salesOrder == null) {
+			return "redirect:/order";
+		}
+		
 		model.addAttribute("salesOrder", salesOrder);
 		model.addAttribute("user", salesOrder.getCustomer());
 		return "order/show-order";
@@ -114,5 +119,10 @@ public class OrderController {
 		model.addAttribute("user", user);
 		//
 		return "order/show-order";
+	}
+	
+	@ExceptionHandler({EntityNotFoundException.class})
+	public String handleException(EntityNotFoundException e) {
+		return "redirect:/order";
 	}
 }

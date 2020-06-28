@@ -2,13 +2,14 @@ package vuicungtienganh.service;
 
 import java.util.List;
 
+import javax.persistence.EntityNotFoundException;
 import javax.transaction.Transactional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.web.bind.annotation.ExceptionHandler;
 
 import vuicungtienganh.dao.SalesOrderRepository;
-import vuicungtienganh.dto.ProductOrderCount;
 import vuicungtienganh.entity.SalesOrder;
 
 @Service
@@ -41,7 +42,15 @@ public class SalesOrderService {
 	
 	@Transactional
 	public SalesOrder findById(int id) {
-		return salesOrderDao.getOne(id);
+		SalesOrder salesOrder;
+		
+		try {
+			salesOrder = salesOrderDao.getOne(id);
+		} catch(EntityNotFoundException e) {
+			salesOrder = null;
+		}
+		
+		return salesOrder;
 	}
 	
 	@Transactional

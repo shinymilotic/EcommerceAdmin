@@ -35,14 +35,20 @@ public class ProductController {
 		model.addAttribute("products", products);
 		
 		return "product/products";
-	}
+	}	
 	
 	@GetMapping("/{id}")
 	public String showSpecificProduct(@PathVariable("id") int id,
 			Model model) {
-		Product product = productService.getProductById(id);
-		model.addAttribute("product", product);
+		Product product;
+		try {
+			product = productService.getProductById(id);
+		} catch(Exception e) {
+			return "redirect:/product";
+		}
 		
+		
+		model.addAttribute("product", product);
 		return "product/product";
 	}
 	@GetMapping("/insert")

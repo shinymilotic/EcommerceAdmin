@@ -1,4 +1,4 @@
-package vuicungtienganh.entity;
+	package vuicungtienganh.entity;
 
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
