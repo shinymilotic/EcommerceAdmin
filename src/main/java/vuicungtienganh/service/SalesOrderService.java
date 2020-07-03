@@ -41,7 +41,7 @@ public class SalesOrderService {
 	}
 	
 	@Transactional
-	public SalesOrder findById(int id) {
+	public Sales=Order findById(int id) {
 		SalesOrder salesOrder;
 		
 		try {
